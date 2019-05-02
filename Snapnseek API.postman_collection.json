@@ -1,0 +1,517 @@
+{
+	"info": {
+		"_postman_id": "c221fd69-36a0-47b4-a61a-c49f1eac51f9",
+		"name": "Snapnseek API",
+		"description": "* next to the name of the request indicates that this request requires an Authorization header",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register New User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"test2\",\n  \"password\": \"test2\",\n  \"displayName\": \"test2\"\n}"
+						},
+						"url": {
+							"raw": "{{domain}}/auth/register",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cff0182a-daff-4551-9e84-2b4dfc08e83c",
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"if (jsonData.token !== undefined) {",
+									"    pm.environment.set(\"token\", \"Bearer \" + jsonData.token)",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testuser\"\n}"
+						},
+						"url": {
+							"raw": "{{domain}}/auth/login",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Log in as an existing user."
+					},
+					"response": []
+				},
+				{
+					"name": "*Logout",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/auth/logout",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Log out of gaggle."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Likes",
+			"item": [
+				{
+					"name": "*Add Like",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"messageId\": 31\n}"
+						},
+						"url": {
+							"raw": "{{domain}}/likes",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"likes"
+							]
+						},
+						"description": "Like an existing message."
+					},
+					"response": []
+				},
+				{
+					"name": "*Remove Like",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/likes/542",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"likes",
+								"542"
+							]
+						},
+						"description": "Unlike an existing message."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Guesses",
+			"item": [
+				{
+					"name": "*Create Guess",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": ""
+								},
+								{
+									"key": "text",
+									"type": "text",
+									"value": "test guess"
+								},
+								{
+									"key": "targetId",
+									"value": 1
+								}
+							]
+						},
+						"url": {
+							"raw": "{{domain}}/guesses",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"guesses"
+							]
+						},
+						"description": "Create a new guess."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Guesses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/guesses?limit=1000&offset=0",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"guesses"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1000"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						},
+						"description": "Get all guesses posted by users."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Guess by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/guesses/563",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"guesses",
+								"563"
+							]
+						},
+						"description": "Get a specific guess by id."
+					},
+					"response": []
+				},
+				{
+					"name": "*Delete Guess by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/guesses/587",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"guesses",
+								"587"
+							]
+						},
+						"description": "Delete a specific guess by id."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get User by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/users/21224",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"21224"
+							]
+						},
+						"description": "Get a specific user by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/users?limit=100&offset=0",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "100"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						},
+						"description": "Get a specific user by id."
+					},
+					"response": []
+				},
+				{
+					"name": "*Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"displayName\": \"Test User\",\n\t\"password\": \"password\",\n\t\"about\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{domain}}/users",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "Update the currently logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "*Delete Currently Authenticated User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/users",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "Delete the currently signed on user."
+					},
+					"response": []
+				},
+				{
+					"name": "*Set User Profile Picture",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": ""
+								}
+							]
+						},
+						"url": {
+							"raw": "{{domain}}/users/picture",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"picture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile Picture by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/users/2/picture",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"2",
+								"picture"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "759dd9c8-765f-4236-8586-ec92d0160bf1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3ca0330c-4ea9-485a-b823-ae684bdac9f1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
