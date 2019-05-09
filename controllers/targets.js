@@ -3,17 +3,17 @@ const router = express.Router();
 const { Target } = require("../models");
 const { authMiddleware } = require("./auth");
 // const Sequelize = require("sequelize")
-let config = null;
-config = process.env.NODE_ENV !== "production" ? require("../.env") : null;
+// let config = null;
+// config = process.env.NODE_ENV !== "production" ? require("../.env") : null;
 
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
+const EXIF = require("exif-js");
 
 AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY || config.AWS_ACCESS_KEY,
-  secretAccessKey:
-    process.env.AWS_SECRET_ACCESS_KEY || config.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: "us-east-2"
 });
 
@@ -44,6 +44,11 @@ router.post(
     console.log(req);
     const supportedContentTypes = ["image/gif", "image/jpeg", "image/png"];
     const { location, mimetype } = req.files.picture[0];
+
+    // const buffer = req.files.picture[0].buffer;
+    // const result = EXIF.readFromBinaryFile(buffer);
+    // console.log(result);
+
     const { text, title, neighborhood } = req.body;
 
     const { id } = req.user;
